@@ -230,6 +230,17 @@ b,strong{font-weight:800}
 .vbox:focus{border-color:var(--brand-d);background:#e0e7ff;box-shadow:0 0 0 4px rgba(79,70,229,.18)}
 .vbox.carry{border:2px dashed #f59e0b;background:#fffbeb;color:#b45309;font-size:calc(var(--vc)*.4);width:calc(var(--vc)*.7);height:calc(var(--vc)*.7)}
 .vbox.wide{width:calc(var(--vc)*2.6);height:calc(var(--vc)*1.15);font-size:calc(var(--vc)*.72);letter-spacing:.06em;text-align:center}
+.workspace.mult{display:flex;flex-direction:column;align-items:center;gap:16px;max-width:1100px}
+.workspace.mult .mat{order:1;width:100%;max-width:1000px}
+.workspace.mult .vertcard{order:2}
+.arr-body{display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-rows:auto 1fr;gap:6px 10px;align-items:start}
+.arr-corner{grid-row:1;grid-column:1;display:grid;place-items:center;min-width:46px;font-size:2.2rem;font-weight:800;color:var(--brand);line-height:1}
+.arr-left{grid-row:2;grid-column:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding-top:4px}
+.arr-body .chart-wrap{grid-row:1 / 3;grid-column:2;min-width:0}
+.arr-cell{display:flex;flex-direction:column;align-items:center;gap:5px;margin-bottom:8px;align-self:stretch}
+.arr-blocks{display:flex;gap:3px;align-items:flex-end;justify-content:center}
+.arr-label{font-size:.82rem;font-weight:800;color:var(--brand);background:#eef2ff;border-radius:999px;padding:1px 10px}
+.workspace.mult .col-body{min-height:calc(var(--u)*12);max-height:calc(var(--u)*24 + 44px)}
 .vbox:disabled{opacity:.85;cursor:default}
 .vhelp{font-size:.92rem;font-weight:700;color:var(--muted);text-align:center}
 .prizewrap{background:linear-gradient(135deg,#fff7ed,#fef9c3);border:3px solid #fcd34d;border-radius:20px;padding:16px 18px;margin-top:14px}
@@ -895,7 +906,7 @@ function genMult(){
   return {
     kind:'mult', a:a, b:b, ans:p, op:'\u00d7',
     prompt:'<b>'+a+' \u00d7 '+b+'</b> = ?',
-    tip:'Write the product in the boxes, then build it with blocks. Think: '+a+' groups of '+b+'.',
+    tip:'Fill the array: '+b+' rows of '+a+'. Put rods in the tens column and ones in the ones column, then write the product.',
     mats:['A'], titles:['The product'], init:{A:mat()},
     hasHundreds: p>=100,
     check:function(){
@@ -910,7 +921,11 @@ function genMult(){
       return {ok:true,msg:'Yes! '+a+' \u00d7 '+b+' = <b>'+p+'</b>.'};
     },
     hint:function(l){
-      if(l===0) return a+' \u00d7 '+b+' means '+a+' groups of '+b+'.';
+      var T=Math.floor(a/10), O=a%10;
+      if(l===0){
+        if(T>0) return b+' rows of '+a+': '+b+' \u00d7 '+T+' = '+(b*T)+' rods ('+(b*T*10)+') and '+b+' \u00d7 '+O+' = '+(b*O)+' ones.';
+        return b+' rows of '+O+' ones = '+(b*O)+' ones. Trade 10 ones for 1 ten.';
+      }
       return 'The product is '+p+'.';
     }
   };
@@ -968,8 +983,9 @@ function buildLevels(){
     btns[i].setAttribute('aria-pressed', String(btns[i].getAttribute('data-level')===state.level));
   }
 }
-function colShell(id,kind,label){
+function colShell(id,kind,label,top){
   return '<div class="col col-'+kind+'">'+
+    (top||'')+
     '<div class="col-head">'+
       '<span class="col-name">'+label+'</span>'+
       '<b class="col-cnt" id="cnt-'+id+'-'+kind+'">0</b>'+
@@ -978,7 +994,7 @@ function colShell(id,kind,label){
     '<div class="col-body" id="body-'+id+'-'+kind+'"></div>'+
   '</div>';
 }
-function matShell(id,title){
+function supplyRail(id){
   var supply='', i;
   var defs=[['one','Ones'],['ten','Tens'],['hundred','Hundreds']];
   for(i=0;i<defs.length;i++){
@@ -986,6 +1002,25 @@ function matShell(id,title){
       '<span class="mini b-'+defs[i][0]+'" aria-hidden="true"></span>'+
       '<span class="lbl">'+defs[i][1]+'</span><span class="add" aria-hidden="true">+</span></button>';
   }
+  return supply;
+}
+function exRow(id){
+  return '<div class="ex-row" id="exrow-'+id+'">'+
+      '<div class="exchange" data-drop="ex" data-mat="'+id+'">'+
+        '<div class="ex-label">Exchange box</div>'+
+        '<div class="ex-help">Drag a ten here to break it into 10 ones.<br>Drop 10 ones here to make a ten.</div>'+
+        '<div class="ex-pending" id="expend-'+id+'"></div>'+
+      '</div>'+
+      '<div class="trades" id="trades-'+id+'"></div>'+
+    '</div>';
+}
+function matTail(id){
+  return exRow(id)+
+    '<div class="supply" data-drop="supply" data-mat="'+id+'">'+supplyRail(id)+
+      '<div class="supply-note" id="snote-'+id+'" hidden>You cannot add blocks in this game. Only take away and trade.</div>'+
+    '</div>';
+}
+function matShell(id,title){
   return '<section class="mat" id="mat-'+id+'" data-matid="'+id+'">'+
     '<div class="mat-head">'+
       '<span class="mat-title">'+title+'</span>'+
@@ -994,27 +1029,49 @@ function matShell(id,title){
     '<div class="chart-wrap"><div class="chart" data-drop="mat" data-mat="'+id+'">'+
       colShell(id,'hundred','Hundreds')+colShell(id,'ten','Tens')+colShell(id,'one','Ones')+
     '</div></div>'+
-    '<div class="ex-row" id="exrow-'+id+'">'+
-      '<div class="exchange" data-drop="ex" data-mat="'+id+'">'+
-        '<div class="ex-label">Exchange box</div>'+
-        '<div class="ex-help">Drag a ten here to break it into 10 ones.<br>Drop 10 ones here to make a ten.</div>'+
-        '<div class="ex-pending" id="expend-'+id+'"></div>'+
-      '</div>'+
-      '<div class="trades" id="trades-'+id+'"></div>'+
+    matTail(id)+
+  '</section>';
+}
+function miniRun(kind,n,label){
+  if(!n) return '';
+  var h='', i;
+  for(i=0;i<n;i++) h+='<span class="mini b-'+kind+'" aria-hidden="true"></span>';
+  return '<div class="arr-cell" aria-hidden="true"><div class="arr-blocks">'+h+'</div><span class="arr-label">'+label+'</span></div>';
+}
+function arrayShell(q){
+  var a=q.a, T=Math.floor(a/10), O=a%10, b=q.b, left='', i;
+  for(i=0;i<b;i++) left+='<span class="mini b-one" aria-hidden="true"></span>';
+  return '<section class="mat" id="mat-A" data-matid="A">'+
+    '<div class="mat-head">'+
+      '<span class="mat-title">Build the array</span>'+
+      '<span class="mat-value" id="val-A">0</span>'+
     '</div>'+
-    '<div class="supply" data-drop="supply" data-mat="'+id+'">'+supply+
-      '<div class="supply-note" id="snote-'+id+'" hidden>You cannot add blocks in this game. Only take away and trade.</div>'+
+    '<div class="arr-body">'+
+      '<div class="arr-corner" aria-hidden="true">\u00d7</div>'+
+      '<div class="arr-left" aria-hidden="true">'+left+'</div>'+
+      '<div class="chart-wrap"><div class="chart" data-drop="mat" data-mat="A">'+
+        colShell('A','hundred','Hundreds')+
+        colShell('A','ten','Tens',miniRun('ten',T,'10'))+
+        colShell('A','one','Ones',miniRun('one',O,'1'))+
+      '</div></div>'+
     '</div>'+
+    matTail('A')+
   '</section>';
 }
 function renderWorkspace(){
   var q=state.question, ws=$('#workspace'), h='', i;
-  var vert = q.kind==='word' || q.kind==='mult' || q.kind==='count';
-  ws.className='workspace' + ((q.mats.length>1||vert)?' two':'') + (((q.mats.length>1||vert)&&q.hasHundreds)?' stacked':'');
-  ws.style.setProperty('--u-base', uBase()+'px');
-  if(vert) h += (q.kind==='count' ? countShell(q) : vertShell(q));
-  for(i=0;i<q.mats.length;i++) h += matShell(q.mats[i], q.titles[i]);
-  ws.innerHTML=h;
+  if(q.kind==='mult'){
+    ws.className='workspace mult';
+    ws.style.setProperty('--u-base', (uBase()+4)+'px');
+    ws.innerHTML=vertShell(q)+arrayShell(q);
+  } else {
+    var vert = q.kind==='word' || q.kind==='count';
+    ws.className='workspace' + ((q.mats.length>1||vert)?' two':'') + (((q.mats.length>1||vert)&&q.hasHundreds)?' stacked':'');
+    ws.style.setProperty('--u-base', uBase()+'px');
+    if(vert) h += (q.kind==='count' ? countShell(q) : vertShell(q));
+    for(i=0;i<q.mats.length;i++) h += matShell(q.mats[i], q.titles[i]);
+    ws.innerHTML=h;
+  }
 
   var sb=$('#symbbar');
   if(q.kind==='compare'){
