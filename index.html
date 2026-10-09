@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Base Ten Builder - Math Practice Games</title>
-<meta name="description" content="Drag base ten blocks to practice place value, addition, subtraction, comparing numbers and skip counting. Made for grade 2.">
+<title>Base Ten &amp; Beyond - Grade 2 Math Activity Games</title>
+<meta name="description" content="Base ten block games: word problems with vertical columns, multiplication, place value, addition, subtraction, comparing and skip counting. Made for grade 2.">
 <style>
 *,*::before,*::after{box-sizing:border-box}
 :root{
@@ -119,6 +119,8 @@ b,strong{font-weight:800}
 
 .block{position:relative;flex:0 0 auto;padding:0;border:1px solid rgba(0,0,0,.22);cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;box-shadow:inset 0 2px 0 rgba(255,255,255,.55),inset 0 -2px 0 rgba(0,0,0,.14),0 2px 3px rgba(0,0,0,.2)}
 .block:active{cursor:grabbing}
+.block.locked{cursor:default}
+.block.locked:active{cursor:default}
 .b-one{width:var(--u);height:var(--u);border-radius:5px;background:linear-gradient(155deg,var(--one1),var(--one2))}
 .b-ten{width:var(--u);height:calc(var(--u)*10);border-radius:5px;
   background:repeating-linear-gradient(to bottom,transparent 0 calc(10% - 1.5px),rgba(0,0,0,.3) calc(10% - 1.5px) 10%),linear-gradient(155deg,var(--ten1),var(--ten2))}
@@ -186,11 +188,73 @@ b,strong{font-weight:800}
 .btn-main:hover{filter:brightness(1.06)}
 .btn-main:disabled{opacity:.5;cursor:default;box-shadow:none}
 
+/* ===== v2: big kid-friendly buttons, vertical column form, prizes ===== */
+.modes{justify-content:center}
+.mode-btn{padding:14px 20px;font-size:1.1rem;border-radius:18px;min-height:56px;--mt:#fff;--mb:var(--line);--mc:#334155;background:var(--mt);border-color:var(--mb);color:var(--mc)}
+.mode-btn .glyph{min-width:32px;height:28px;font-size:.95rem;padding:0 7px;background:var(--mc);color:#fff}
+.mode-btn:hover{filter:brightness(.96)}
+.mode-btn[data-mode="place"]{--mt:#eff6ff;--mb:#93c5fd;--mc:#1d4ed8}
+.mode-btn[data-mode="count"]{--mt:#f5f3ff;--mb:#c4b5fd;--mc:#6d28d9}
+.mode-btn[data-mode="add"]{--mt:#ecfdf5;--mb:#6ee7b7;--mc:#047857}
+.mode-btn[data-mode="sub"]{--mt:#fff7ed;--mb:#fdba74;--mc:#c2410c}
+.mode-btn[data-mode="word"]{--mt:#f0fdfa;--mb:#5eead4;--mc:#0f766e}
+.mode-btn[data-mode="mult"]{--mt:#fdf2f8;--mb:#f9a8d4;--mc:#be185d}
+.mode-btn[data-mode="compare"]{--mt:#fffbeb;--mb:#fcd34d;--mc:#b45309}
+.mode-btn[data-mode="skip"]{--mt:#ecfeff;--mb:#67e8f9;--mc:#0e7490}
+.mode-btn[aria-selected="true"]{background:var(--mc);border-color:var(--mc);color:#fff;box-shadow:0 8px 18px rgba(2,6,23,.22)}
+.mode-btn[aria-selected="true"] .glyph{background:rgba(255,255,255,.28)}
+.ghostbtn{padding:11px 18px;font-size:1rem}
+.shelfbtn{background:#fffbeb;border-color:#fcd34d;color:#92400e;font-weight:800}
+.shelfbtn b{color:#b45309}
+.seg button{padding:10px 22px;font-size:1.05rem}
+.minus{width:36px;height:36px;font-size:1.3rem}
+.supply-btn{min-height:74px;padding:10px 16px 10px 12px}
+.supply-btn .lbl{font-size:1.08rem}
+.sym{min-width:130px;padding:16px 18px}
+.sym .g{font-size:2.5rem}
+.sym .w{font-size:.95rem}
+.btn{padding:18px 30px;font-size:1.2rem;border-radius:18px}
+#checkBtn{padding:20px 42px;font-size:1.3rem}
+.controls{gap:14px}
+.prompt.story{font-size:clamp(1.18rem,2.5vw,1.55rem);line-height:1.55;text-align:left;letter-spacing:0}
+.story-emoji{font-size:1.55em;margin-right:.3em;vertical-align:-.12em}
+.vertcard{background:var(--card);border:3px solid var(--line);border-radius:24px;padding:16px 18px 14px;box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0;transition:.2s}
+.vertcard.won{border-color:#86efac;background:var(--ok-bg)}
+.vtitle{font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.vform{display:flex;flex-direction:column;width:max-content;max-width:100%;gap:5px;--vc:clamp(42px,6.5vw,58px)}
+.vrow{display:flex;gap:6px;justify-content:flex-end;align-items:center}
+.vcell{width:var(--vc);height:var(--vc);display:grid;place-items:center;font-size:calc(var(--vc)*.56);font-weight:800;font-variant-numeric:tabular-nums;color:var(--ink)}
+.vcell.op{color:var(--brand);font-size:calc(var(--vc)*.62)}
+.vrule{align-self:stretch;height:0;border-top:4px solid var(--ink);border-radius:3px;margin:3px 0 4px}
+.vbox{width:var(--vc);height:var(--vc);border:3px solid var(--brand);border-radius:10px;background:#eef2ff;font-size:calc(var(--vc)*.56);font-weight:800;text-align:center;font-family:inherit;color:var(--ink);padding:0;font-variant-numeric:tabular-nums;outline:none}
+.vbox:focus{border-color:var(--brand-d);background:#e0e7ff;box-shadow:0 0 0 4px rgba(79,70,229,.18)}
+.vbox.carry{border:2px dashed #f59e0b;background:#fffbeb;color:#b45309;font-size:calc(var(--vc)*.4);width:calc(var(--vc)*.7);height:calc(var(--vc)*.7)}
+.vbox.wide{width:calc(var(--vc)*2.6);height:calc(var(--vc)*1.15);font-size:calc(var(--vc)*.72);letter-spacing:.06em;text-align:center}
+.vbox:disabled{opacity:.85;cursor:default}
+.vhelp{font-size:.92rem;font-weight:700;color:var(--muted);text-align:center}
+.prizewrap{background:linear-gradient(135deg,#fff7ed,#fef9c3);border:3px solid #fcd34d;border-radius:20px;padding:16px 18px;margin-top:14px}
+.prizewrap[hidden]{display:none}
+.prize-emoji{font-size:74px;line-height:1;animation:bounceIn .55s cubic-bezier(.3,1.5,.5,1);filter:drop-shadow(0 6px 10px rgba(0,0,0,.2))}
+@keyframes bounceIn{0%{transform:scale(.2) rotate(-18deg);opacity:0}60%{transform:scale(1.18) rotate(6deg)}100%{transform:scale(1) rotate(0);opacity:1}}
+.prize-sub{font-size:.98rem;color:#92400e;font-weight:700;margin:4px 0 0}
+.sheet-wide{max-width:760px}
+.shelf-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:10px;margin:16px 0 6px}
+.prize-cell{border:2px solid var(--line);border-radius:16px;background:#f8fafc;padding:12px 6px 10px;text-align:center}
+.pc-e{display:block;font-size:40px;line-height:1}
+.pc-n{display:block;font-size:.92rem;font-weight:800;margin-top:4px;color:var(--ink)}
+.pc-m{display:block;font-size:.76rem;color:var(--muted);font-weight:700;margin-top:2px}
+.empty-shelf{font-size:1.1rem;color:var(--muted);font-weight:700;padding:14px 0}
+.score-h{font-size:1.2rem;margin:18px 0 6px;color:var(--ink)}
+.scorelist{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px}
+.score-row{display:flex;justify-content:space-between;gap:8px;background:#eef2ff;border:2px solid #c7d2fe;border-radius:12px;padding:9px 14px;font-weight:800}
+.sr-name{color:#3730a3}
+.sr-val{color:var(--brand-d)}
+
 @keyframes pop{0%{transform:scale(.3);opacity:0}70%{transform:scale(1.13)}100%{transform:scale(1);opacity:1}}
 @keyframes shake{10%,90%{transform:translateX(-2px)}20%,80%{transform:translateX(4px)}30%,50%,70%{transform:translateX(-7px)}40%,60%{transform:translateX(7px)}}
 @keyframes flash{0%{box-shadow:0 0 0 0 rgba(79,70,229,.5)}60%{box-shadow:0 0 0 12px rgba(79,70,229,0)}100%{box-shadow:0 0 0 0 rgba(79,70,229,0)}}
 @keyframes conf{0%{transform:translate(-50%,-50%) scale(.3) rotate(0);opacity:1}100%{transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(1) rotate(var(--rot));opacity:0}}
-.confetti{position:fixed;width:13px;height:13px;border-radius:3px;pointer-events:none;z-index:400;animation:conf .95s cubic-bezier(.2,.7,.3,1) forwards}
+.confetti{position:fixed;width:13px;height:13px;border-radius:3px;pointer-events:none;z-index:600;animation:conf .95s cubic-bezier(.2,.7,.3,1) forwards}
 
 .modal{position:fixed;inset:0;background:rgba(15,23,42,.55);display:grid;place-items:center;padding:20px;z-index:500;backdrop-filter:blur(3px)}
 .modal[hidden]{display:none}
@@ -211,8 +275,10 @@ b,strong{font-weight:800}
 @media (prefers-reduced-motion: reduce){*{animation-duration:.001s!important;transition-duration:.001s!important}}
 @media(max-width:520px){
   html{font-size:17px}
-  .btn{padding:14px 18px;font-size:1.05rem}
-  .sym{min-width:88px}
+  .btn{padding:16px 20px;font-size:1.12rem}
+  #checkBtn{padding:18px 26px;font-size:1.2rem}
+  .mode-btn{padding:12px 16px;font-size:1.02rem}
+  .sym{min-width:100px}
 }
 </style>
 </head>
@@ -222,7 +288,7 @@ b,strong{font-weight:800}
   <header class="topbar">
     <div class="brand">
       <span class="logo" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span>
-      Base Ten Builder
+      Base Ten &amp; Beyond
     </div>
     <div class="spacer"></div>
     <div class="stats">
@@ -230,6 +296,7 @@ b,strong{font-weight:800}
       <span class="stat"><span class="k">Streak</span><b id="hudStreak">0</b></span>
       <span class="stat"><span class="k">Round</span><b id="hudProg">1/10</b></span>
     </div>
+    <button class="ghostbtn shelfbtn" id="shelfBtn" type="button">🏆 Prizes <b id="prizeCount">0</b></button>
     <button class="ghostbtn" id="soundBtn" type="button" aria-pressed="true">Sound: On</button>
     <button class="ghostbtn" id="helpBtn" type="button">How to play</button>
   </header>
@@ -263,10 +330,10 @@ b,strong{font-weight:800}
     <button class="btn btn-plain" id="undoBtn" type="button" disabled>Undo</button>
     <button class="btn btn-plain" id="resetBtn" type="button">Start over</button>
     <button class="btn btn-plain" id="skipBtn" type="button">Skip</button>
-    <button class="btn btn-main" id="checkBtn" type="button">Check my answer</button>
+    <button class="btn btn-main" id="checkBtn" type="button">✔ Check my answer</button>
   </div>
 
-  <p class="foot">Drag blocks with a mouse or finger. Tap a block to take it away.</p>
+  <p class="foot">Drag blocks with a mouse or finger. Tap a block to take it away. Type your answer in the boxes, then press Check!</p>
 </div>
 
 <div class="modal" id="results" hidden>
@@ -275,6 +342,11 @@ b,strong{font-weight:800}
     <div class="stars" id="resStars"></div>
     <p class="big" id="resScore"></p>
     <p id="resDetail"></p>
+    <div class="prizewrap" id="prizewrap" hidden>
+      <div class="prize-emoji" id="prizeEmoji">🍬</div>
+      <p class="big" id="prizeLine">You won a prize!</p>
+      <p class="prize-sub" id="prizeSub">It is now on your Prize Shelf 🏆</p>
+    </div>
     <div class="row">
       <button class="btn btn-main" id="againBtn" type="button">Play again</button>
       <button class="btn btn-plain" id="changeBtn" type="button">Change game</button>
@@ -291,9 +363,27 @@ b,strong{font-weight:800}
       <li><b>Exchange:</b> 10 ones make 1 ten, and 10 tens make 1 hundred. Drag a ten into the Exchange box to break it into 10 ones, or use the trade buttons.</li>
       <li><b>Check:</b> press <span class="kbd">Check my answer</span> or the <span class="kbd">Enter</span> key when you are ready.</li>
       <li><b>Stuck?</b> Press <span class="kbd">Hint</span>, or <span class="kbd">Undo</span> / <span class="kbd">Start over</span>.</li>
+      <li><b>Count the Blocks:</b> the chart is already filled. Count the ten-rods and the one-cubes, then write the total in the boxes. Trading 10 ones for 1 ten keeps the same total, but taking blocks away changes it &mdash; so count carefully!</li>
+      <li><b>Word Problems:</b> read the story, spot the clue words (more = add, left = subtract), write the answer in the column boxes, then build it with blocks.</li>
+      <li><b>Multiplication:</b> write the product in the boxes, then build it with blocks. Think: 3 &times; 4 means 3 groups of 4.</li>
+      <li><b>Column boxes:</b> start from the ones on the right. When a column needs a carry or a borrow, a small orange box appears above it &mdash; write the tiny number there, just like on your worksheet!</li>
+      <li><b>Prizes:</b> finish any activity to win a candy, toy or squishy &mdash; see them on your 🏆 Prize Shelf!</li>
     </ul>
     <div class="row">
       <button class="btn btn-main" id="helpClose" type="button">Let's play</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="shelf" hidden>
+  <div class="sheet sheet-wide">
+    <h2>🏆 My Prize Shelf</h2>
+    <p>Every finished activity wins a candy, toy or squishy!</p>
+    <div class="shelf-grid" id="shelfGrid"></div>
+    <h3 class="score-h">⭐ Activity Best Scores</h3>
+    <div class="scorelist" id="scoreList"></div>
+    <div class="row">
+      <button class="btn btn-main" id="shelfClose" type="button">Done</button>
     </div>
   </div>
 </div>
@@ -315,8 +405,11 @@ function put(m,n){ m.hundreds=Math.floor(n/100); m.tens=Math.floor((n%100)/10); 
 
 var MODES = [
   {id:'place',   label:'Place Value',   glyph:'123', tip:'Drag blocks to show a number.'},
+  {id:'count',   label:'Count the Blocks', glyph:'?', tip:'Count the tens and ones, then write the total.'},
   {id:'add',     label:'Addition',      glyph:'+',   tip:'Add blocks, then trade to regroup.'},
   {id:'sub',     label:'Subtraction',   glyph:'-',   tip:'Take away blocks. Break a ten when you must.'},
+  {id:'word',    label:'Word Problems', glyph:'Aa',  tip:'Read the story, fill the columns, build the answer.'},
+  {id:'mult',    label:'Multiplication',glyph:'\u00d7', tip:'Write the product in the boxes, then build it with blocks.'},
   {id:'compare', label:'Compare',       glyph:'<>',  tip:'Build both numbers, then pick a sign.'},
   {id:'skip',    label:'Skip Counting', glyph:'...', tip:'Find the missing number in the pattern.'}
 ];
@@ -391,7 +484,158 @@ function say(kind,msg,pts){
 }
 function clearSay(){ var f=$('#feedback'); f.className='feedback'; f.innerHTML=''; }
 
+/* ---------------- prizes & per-activity scores ---------------- */
+var COMMON_PRIZES=[
+  {e:'🍬',n:'Gummy Candy'},{e:'🍭',n:'Lollipop'},{e:'🧁',n:'Cupcake'},{e:'🍪',n:'Choc Cookie'},
+  {e:'🎈',n:'Party Balloon'},{e:'🖍️',n:'Crayon Pack'},{e:'🎲',n:'Lucky Dice'},{e:'🪀',n:'Yoyo'},
+  {e:'🧩',n:'Puzzle Piece'},{e:'🚗',n:'Toy Car'},{e:'⭐',n:'Gold Star Sticker'},{e:'🌈',n:'Rainbow Sticker'}
+];
+var RARE_PRIZES=[
+  {e:'🧸',n:'Teddy Bear'},{e:'🦄',n:'Unicorn Squishy'},{e:'🦖',n:'Dino Figure'},{e:'🐢',n:'Turtle Plush'},
+  {e:'🏎️',n:'Race Car'},{e:'🐘',n:'Elephant Plush'},{e:'🎸',n:'Toy Guitar'},{e:'🍫',n:'Chocolate Bar'},
+  {e:'👑',n:'Royal Crown'},{e:'🌈',n:'Rainbow Squishy'}
+];
+function loadPrizes(){ try{ return JSON.parse(localStorage.getItem('b10:prizes')||'[]'); }catch(e){ return []; } }
+function savePrizes(a){ try{ localStorage.setItem('b10:prizes',JSON.stringify(a)); }catch(e){} }
+function updatePrizeCount(){ var el=$('#prizeCount'); if(el) el.textContent=loadPrizes().length; }
+function bestOfMode(mode){
+  var best=0, Ls=['easy','medium','hard'], i;
+  for(i=0;i<Ls.length;i++){
+    try{ var v=parseInt(localStorage.getItem('b10:'+mode+':'+Ls[i])||'0',10)||0; if(v>best) best=v; }catch(e){}
+  }
+  return best;
+}
+function renderShelf(){
+  var all=loadPrizes(), h='', i;
+  var g=$('#shelfGrid');
+  if(!all.length){
+    g.innerHTML='<p class="empty-shelf">Finish an activity to win your first prize!</p>';
+  } else {
+    for(i=0;i<all.length;i++){
+      var p=all[i];
+      h+='<div class="prize-cell"><span class="pc-e">'+p.e+'</span><span class="pc-n">'+p.n+'</span>'+
+         '<span class="pc-m">'+p.s+' star'+(p.s===1?'':'s')+' \u00b7 '+(modeInfo(p.m)?modeInfo(p.m).label:p.m)+'</span></div>';
+    }
+    g.innerHTML=h;
+  }
+  var sl=$('#scoreList'), rows='';
+  for(i=0;i<MODES.length;i++){
+    rows+='<div class="score-row"><span class="sr-name">'+MODES[i].label+'</span><span class="sr-val">'+bestOfMode(MODES[i].id)+'</span></div>';
+  }
+  sl.innerHTML=rows;
+}
+
+/* ---------------- vertical column form ---------------- */
+function readVert(){
+  var bs=document.querySelectorAll('#vform .vbox[data-answer]');
+  if(!bs.length) return null;
+  var s='', i;
+  for(i=0;i<bs.length;i++){
+    if(!bs[i].value) return null;
+    s+=bs[i].value;
+  }
+  return parseInt(s,10);
+}
+function carryPlan(q){
+  var da=String(q.a).split('').map(Number), db=String(q.b).split('').map(Number);
+  var maxLen=Math.max(da.length,db.length), boxes={}, i, dA, dB;
+  if(q.op==='+'){
+    var c=0;
+    for(i=0;i<maxLen;i++){
+      dA=da[da.length-1-i]||0; dB=db[db.length-1-i]||0;
+      c=Math.floor((dA+dB+c)/10);
+      if(c>0 && i+1<maxLen) boxes[i+1]=1;
+    }
+  } else if(q.op==='\u00d7'){
+    var mc=Math.floor((da[da.length-1]*db[db.length-1])/10);
+    if(mc>0 && maxLen>1) boxes[1]=1;
+  } else {
+    var borrow=0;
+    for(i=0;i<maxLen;i++){
+      dA=da[da.length-1-i]||0; dB=db[db.length-1-i]||0;
+      borrow=(dA-borrow-dB)<0?1:0;
+      if(borrow && i+1<maxLen) boxes[i+1]=1;
+    }
+  }
+  return {w:maxLen, boxes:boxes};
+}
+function vertShell(q){
+  var da=String(q.a).split(''), db=String(q.b).split(''), an=String(q.ans).split('');
+  var cp=carryPlan(q), hasCarry=false, k;
+  for(k in cp.boxes) hasCarry=true;
+  var h='', i;
+  h+='<section class="vertcard" id="vertcard">'+
+     '<div class="vtitle">Write it in columns \u270f</div>'+
+     '<div class="vform" id="vform">';
+  if(hasCarry){
+    h+='<div class="vrow">';
+    for(i=0;i<cp.w;i++){
+      h += cp.boxes[cp.w-1-i]
+        ? '<input class="vbox carry" data-carry inputmode="numeric" maxlength="1" aria-label="carry or borrow box">'
+        : '<span class="vcell"></span>';
+    }
+    h+='</div>';
+  }
+  h+='<div class="vrow">';
+  for(i=0;i<da.length;i++) h+='<span class="vcell">'+da[i]+'</span>';
+  h+='</div>';
+  h+='<div class="vrow"><span class="vcell op">'+q.op+'</span>';
+  for(i=0;i<db.length;i++) h+='<span class="vcell">'+db[i]+'</span>';
+  h+='</div>';
+  h+='<div class="vrule"></div>';
+  h+='<div class="vrow">';
+  for(i=0;i<an.length;i++){
+    h+='<input class="vbox" data-answer data-i="'+i+'" inputmode="numeric" maxlength="1" disabled aria-label="answer digit '+(i+1)+'">';
+  }
+  h+='</div></div>';
+  h+='<div class="vhelp">One digit per box &mdash; start at the ones on the right.'+
+     (hasCarry?' Write the tiny carry or borrow number in the orange box.':'')+'</div>';
+  h+='</section>';
+  return h;
+}
+function countShell(q){
+  var h='<section class="vertcard" id="vertcard">'+
+     '<div class="vtitle">Write the total \u270f</div>'+
+     '<div class="vform" id="vform"><div class="vrow">'+
+     '<input class="vbox wide" data-answer inputmode="numeric" maxlength="2" disabled aria-label="total answer box">'+
+     '</div></div>'+
+     '<div class="vhelp">Count the tens first, then the ones.</div>'+
+     '</section>';
+  return h;
+}
+
 /* ---------------- generators ---------------- */
+function genCount(){
+  var L=state.level, tens, ones;
+  if(L==='easy'){ tens=rnd(1,4); ones=rnd(1,6); }
+  else if(L==='medium'){ tens=rnd(2,7); ones=rnd(2,9); }
+  else { tens=rnd(4,9); ones=rnd(3,9); }
+  var total=tens*10+ones, m=mat();
+  m.tens=tens; m.ones=ones;
+  return {
+    kind:'count',
+    ans:total,
+    prompt:'<b>What is the total?</b> Count the tens rods and the ones cubes.',
+    tip:'Count the long rods by tens, then count the little cubes. Write the total in the boxes.',
+    mats:['A'], titles:['The blocks'], init:{A:m},
+    noSupply:true,
+    lockBlocks:true,
+    noSupplyNote:'Count the blocks in the chart. Do not add or take away!',
+    hasHundreds:false,
+    check:function(){
+      var v=matValue(state.mats.A);
+      if(v!==total) return {ok:false,msg:'The blocks changed! They must show '+total+'. Press Start over to put them back.',shake:'A'};
+      var typed=readVert();
+      if(typed===null) return {ok:false,msg:'Count the blocks, then write the total in the boxes.',shake:'vert'};
+      if(typed!==total) return {ok:false,msg:'You wrote '+typed+'. Count again \u2014 tens first, then the ones!',shake:'vert'};
+      return {ok:true,msg:'Yes! '+tens+' tens and '+ones+' ones make <b>'+total+'</b>.'};
+    },
+    hint:function(l){
+      if(l===0) return 'There are '+tens+' ten-rods and '+ones+' one-cubes.';
+      return 'The total is '+total+'.';
+    }
+  };
+}
 function rangeFor(mode){
   var L=state.level;
   if(mode==='place')   return L==='easy'?[6,20] : L==='medium'?[11,99] : [101,399];
@@ -557,11 +801,129 @@ function genSkip(){
   };
 }
 
+var WNAMES=['Mia','Leo','Sam','Ava','Ben','Zoe','Kai','Lily','Max','Ruby'];
+var WITEMS=[
+  {p:'gummy candies',e:'🍬'},{p:'balloons',e:'🎈'},{p:'stickers',e:'⭐'},
+  {p:'toy cars',e:'🚗'},{p:'marbles',e:'🟣'},{p:'crayons',e:'🖍️'},
+  {p:'flowers',e:'🌼'},{p:'apples',e:'🍎'},{p:'blocks',e:'🧱'}
+];
+function wNames(){
+  var a=pick(WNAMES), b=pick(WNAMES);
+  if(b===a) b=WNAMES[(WNAMES.indexOf(a)+3)%WNAMES.length];
+  return [a,b];
+}
+function wordAddStory(a,b){
+  var it=pick(WITEMS), nm=wNames(), t=rnd(0,4);
+  if(t===0) return {e:it.e,s:nm[0]+' had '+a+' '+it.p+'. '+nm[1]+' gave '+b+' more '+it.p+'. How many '+it.p+' does '+nm[0]+' have now?'};
+  if(t===1) return {e:'🚌',s:a+' passengers boarded a bus in Town A, and '+b+' passengers boarded in Town B. How many passengers are on the bus now?'};
+  if(t===2) return {e:'📦',s:'The class packed '+a+' supply kits on Monday and '+b+' supply kits on Tuesday. How many kits were packed altogether?'};
+  if(t===3) return {e:'🚶',s:'A traveler walked '+a+' kilometers in the first week and '+b+' kilometers in the second week. What is the total distance in kilometers?'};
+  return {e:it.e,s:'Group A collected '+a+' '+it.p+' and Group B collected '+b+' '+it.p+'. How many '+it.p+' do they have in all?'};
+}
+function wordSubStory(a,b){
+  var it=pick(WITEMS), nm=wNames(), t=rnd(0,3);
+  if(t===0) return {e:it.e,s:nm[0]+' had '+a+' '+it.p+'. '+nm[0]+' gave away '+b+' '+it.p+'. How many '+it.p+' are left?'};
+  if(t===1) return {e:'🚌',s:'A bus had '+a+' passengers. '+b+' passengers got off at the school. How many passengers are still on the bus?'};
+  if(t===2) return {e:'🎈',s:'There were '+a+' balloons. '+b+' balloons popped. How many balloons are still good?'};
+  return {e:'🍞',s:'The baker made '+a+' bread buns and sold '+b+' of them. How many buns are left in the shop?'};
+}
+function genWord(){
+  var L=state.level, isAdd=Math.random()<0.5, a=5, b=5, i, story, ans, op;
+  if(isAdd){
+    for(i=0;i<60;i++){
+      if(L==='easy'){ a=rnd(4,12); b=rnd(3,12); }
+      else if(L==='medium'){ a=rnd(11,59); b=rnd(5,40); }
+      else { a=rnd(101,249); b=rnd(46,149); }
+      if(L==='easy' && a+b>20) continue;
+      if(L==='medium' && a+b>99) continue;
+      var reg=((a%10)+(b%10))>=10;
+      if(L==='easy'){ if(!reg || i>40) break; }
+      else if(reg || i>35) break;
+    }
+    ans=a+b; op='+';
+    story=wordAddStory(a,b);
+  } else {
+    for(i=0;i<60;i++){
+      if(L==='easy'){ a=rnd(11,20); b=rnd(2,a-1); }
+      else if(L==='medium'){ a=rnd(21,99); b=rnd(6,a-3); }
+      else { a=rnd(150,399); b=rnd(25,a-30); }
+      var reg2=(a%10)<(b%10);
+      if(L==='easy'){ if(!reg2 || i>40) break; }
+      else if(reg2 || i>35) break;
+    }
+    if(a-b<1) b=a-1;
+    ans=a-b; op='\u2212';
+    story=wordSubStory(a,b);
+  }
+  var m=mat(); put(m,a);
+  var okMsg = op==='+' ? ('Yes! '+a+' + '+b+' = <b>'+ans+'</b>.')
+                       : ('Yes! '+a+' \u2212 '+b+' = <b>'+ans+'</b>.');
+  return {
+    kind:'word', story:true, a:a, b:b, ans:ans, op:op,
+    prompt:'<span class="story-emoji">'+story.e+'</span>'+story.s.replace(/(\d+)/g,'<b>$1</b>'),
+    tip: op==='+' ? 'Clue words like "more" or "altogether" mean ADD. Write the total in the boxes, then build it.'
+                  : 'Clue words like "left" or "away" mean SUBTRACT. Write what is left, then show it with blocks.',
+    mats:['A'], titles:[op==='+'?'The total':'What is left'], init:{A:m},
+    noSupply: op!=='+',
+    hasHundreds: Math.max(a,ans)>=100,
+    check:function(){
+      var vert=readVert();
+      var br=checkValue('A',ans,{noAdd:op!=='+', ok:''});
+      if(vert===null){
+        if(br.ok) return {ok:false,msg:'Your blocks are perfect! Now type the answer in the column boxes.',shake:'vert'};
+        return {ok:false,msg:'Fill the answer boxes AND build it with blocks.',shake:'vert'};
+      }
+      if(vert!==ans) return {ok:false,msg:'You wrote '+vert+'. Check the columns again \u2014 start from the ones!',shake:'vert'};
+      if(!br.ok) return {ok:false,msg:'Your columns say '+ans+' \u2014 good! Now show it with blocks: '+br.msg,shake:br.shake};
+      return {ok:true,msg:okMsg};
+    },
+    hint:function(l){
+      if(l===0){
+        if(op==='+') return 'Find the clue words! Words like "more / altogether / total" mean ADD: '+a+' + '+b+'. The chart already has '+a+'.';
+        return 'Find the clue words! Words like "left / away / popped" mean SUBTRACT: '+a+' \u2212 '+b+'. The chart starts at '+a+'.';
+      }
+      return 'The answer is '+ans+'. Type it in the boxes and build it with blocks.';
+    }
+  };
+}
+function genMult(){
+  var L=state.level, a, b;
+  if(L==='easy'){ a=rnd(2,9); b=rnd(2,9); }
+  else if(L==='medium'){ a=rnd(11,49); b=rnd(2,9); }
+  else { a=rnd(11,99); b=rnd(2,9); }
+  var p=a*b;
+  return {
+    kind:'mult', a:a, b:b, ans:p, op:'\u00d7',
+    prompt:'<b>'+a+' \u00d7 '+b+'</b> = ?',
+    tip:'Write the product in the boxes, then build it with blocks. Think: '+a+' groups of '+b+'.',
+    mats:['A'], titles:['The product'], init:{A:mat()},
+    hasHundreds: p>=100,
+    check:function(){
+      var vert=readVert();
+      var br=checkValue('A',p,{ok:''});
+      if(vert===null){
+        if(br.ok) return {ok:false,msg:'Your blocks are perfect! Now type the product in the boxes.',shake:'vert'};
+        return {ok:false,msg:'Fill the answer boxes AND build the product with blocks.',shake:'vert'};
+      }
+      if(vert!==p) return {ok:false,msg:'You wrote '+vert+'. Count again \u2014 think '+a+' groups of '+b+'!',shake:'vert'};
+      if(!br.ok) return {ok:false,msg:'Your columns say '+p+' \u2014 good! Now show it with blocks: '+br.msg,shake:br.shake};
+      return {ok:true,msg:'Yes! '+a+' \u00d7 '+b+' = <b>'+p+'</b>.'};
+    },
+    hint:function(l){
+      if(l===0) return a+' \u00d7 '+b+' means '+a+' groups of '+b+'.';
+      return 'The product is '+p+'.';
+    }
+  };
+}
+
 function genQuestion(){
   switch(state.mode){
     case 'place': return genPlace();
+    case 'count': return genCount();
     case 'add': return genAdd();
     case 'sub': return genSub();
+    case 'word': return genWord();
+    case 'mult': return genMult();
     case 'compare': return genCompare();
     default: return genSkip();
   }
@@ -647,8 +1009,10 @@ function matShell(id,title){
 }
 function renderWorkspace(){
   var q=state.question, ws=$('#workspace'), h='', i;
-  ws.className='workspace' + (q.mats.length>1?' two':'') + (q.mats.length>1 && q.hasHundreds?' stacked':'');
+  var vert = q.kind==='word' || q.kind==='mult' || q.kind==='count';
+  ws.className='workspace' + ((q.mats.length>1||vert)?' two':'') + (((q.mats.length>1||vert)&&q.hasHundreds)?' stacked':'');
   ws.style.setProperty('--u-base', uBase()+'px');
+  if(vert) h += (q.kind==='count' ? countShell(q) : vertShell(q));
   for(i=0;i<q.mats.length;i++) h += matShell(q.mats[i], q.titles[i]);
   ws.innerHTML=h;
 
@@ -662,6 +1026,7 @@ function renderWorkspace(){
       '<span class="vs">Number 2</span>';
   } else { sb.hidden=true; sb.innerHTML=''; }
 
+  $('#prompt').className='prompt'+(q.story?' story':'');
   $('#prompt').innerHTML=q.prompt;
   $('#tip').textContent=q.tip;
   $('#chips').innerHTML=q.chips||'';
@@ -683,38 +1048,40 @@ function updateMat(id){
     if(n===0){ html='<span class="slot s-'+k+'"></span>'; }
     else {
       for(j=0;j<n;j++){
-        html += '<button type="button" class="block b-'+k+(state.fx.pop===(id+'|'+k+'|'+j)?' pop':'')+'" '+
-                'data-drag data-kind="'+k+'" data-from="'+id+'" data-src="chart" tabindex="-1" aria-hidden="true"></button>';
+        html += '<button type="button" class="block b-'+k+(q.lockBlocks?' locked':'')+(state.fx.pop===(id+'|'+k+'|'+j)?' pop':'')+'" '+
+                (q.lockBlocks?'':'data-drag ')+'data-kind="'+k+'" data-from="'+id+'" data-src="chart" tabindex="-1" aria-hidden="true"></button>';
       }
     }
     body.innerHTML=html;
     document.getElementById('cnt-'+id+'-'+k).textContent=n;
-    document.getElementById('minus-'+id+'-'+k).disabled = n===0 || state.phase!=='play';
+    document.getElementById('minus-'+id+'-'+k).disabled = n===0 || state.phase!=='play' || q.lockBlocks;
   }
-  document.getElementById('val-'+id).textContent = matValue(m);
+  document.getElementById('val-'+id).textContent = q.lockBlocks ? '?' : matValue(m);
 
   document.getElementById('expend-'+id).innerHTML = m.pending
     ? '<span class="pend-count">'+m.pending.count+'</span><span class="pend-lbl">ones - drop '+(10-m.pending.count)+' more</span>'+
       '<button type="button" class="pend-back" data-back="'+id+'">Give back</button>'
     : '';
 
-  var T=[];
-  T.push(tradeBtn(id,'one10','10 ones &rarr; 1 ten', m.ones>=10));
-  T.push(tradeBtn(id,'ten1','1 ten &rarr; 10 ones', m.tens>=1));
+  var T=[], canT=!q.lockBlocks;
+  T.push(tradeBtn(id,'one10','10 ones &rarr; 1 ten', canT && m.ones>=10));
+  T.push(tradeBtn(id,'ten1','1 ten &rarr; 10 ones', canT && m.tens>=1));
   if(q.hasHundreds){
-    T.push(tradeBtn(id,'ten10','10 tens &rarr; 1 hundred', m.tens>=10));
-    T.push(tradeBtn(id,'hun1','1 hundred &rarr; 10 tens', m.hundreds>=1));
+    T.push(tradeBtn(id,'ten10','10 tens &rarr; 1 hundred', canT && m.tens>=10));
+    T.push(tradeBtn(id,'hun1','1 hundred &rarr; 10 tens', canT && m.hundreds>=1));
   }
   document.getElementById('trades-'+id).innerHTML=T.join('');
 
   var sbtns=document.querySelectorAll('#mat-'+id+' .supply-btn');
   for(var s=0;s<sbtns.length;s++){
     var b=sbtns[s], kind=b.getAttribute('data-place');
-    var hideH = (kind==='hundred' && !q.hasHundreds);
-    b.disabled = hideH || q.noSupply || state.phase!=='play';
-    b.style.display = hideH ? 'none' : '';
+    var hideB = q.lockBlocks || (kind==='hundred' && !q.hasHundreds);
+    b.disabled = hideB || q.noSupply || state.phase!=='play';
+    b.style.display = hideB ? 'none' : '';
   }
-  document.getElementById('snote-'+id).hidden = !q.noSupply;
+  var snote=document.getElementById('snote-'+id);
+  snote.hidden = !q.noSupply;
+  if(q.noSupply) snote.innerHTML = q.noSupplyNote || 'You cannot add blocks in this game. Only take away and trade.';
 }
 function updateAll(){
   for(var i=0;i<state.question.mats.length;i++) updateMat(state.question.mats[i]);
@@ -726,6 +1093,7 @@ function updateHUD(){
   $('#hudScore').textContent=state.score;
   $('#hudStreak').textContent=state.streak;
   $('#hudProg').textContent=Math.min(state.qNum,TOTAL_Q)+'/'+TOTAL_Q;
+  updatePrizeCount();
 }
 function updateUndo(){
   $('#undoBtn').disabled = state.undo.length===0 || state.phase!=='play';
@@ -747,7 +1115,7 @@ function addBlock(id,kind){
   updateAll();
 }
 function removeBlock(id,kind){
-  if(state.phase!=='play') return;
+  if(state.phase!=='play'||state.question.lockBlocks) return;
   var m=state.mats[id]; if(!m) return;
   if(countOf(m,kind)<1) return;
   pushUndo();
@@ -836,6 +1204,8 @@ function doReset(){
   var q=state.question;
   for(var i=0;i<q.mats.length;i++) state.mats[q.mats[i]] = cloneM(q.init[q.mats[i]]);
   state.undo=[]; state.symbol=null;
+  var vbs=document.querySelectorAll('.vbox');
+  for(var vi=0;vi<vbs.length;vi++) vbs[vi].value='';
   syncSymbols();
   sfx.tick(); clearSay(); updateAll();
 }
@@ -869,12 +1239,14 @@ function doCheck(){
     burst(ws.getBoundingClientRect().left+ws.offsetWidth/2, ws.getBoundingClientRect().top+60);
     updateHUD();
     updateAll();
+    var vc=$('#vertcard'); if(vc) vc.classList.add('won');
     setControls(false);
     setTimeout(nextQuestion,1400);
   } else {
     sfx.no();
     say('bad',res.msg);
     if(res.shake==='sym') shakeEl($('#symbbar'));
+    else if(res.shake==='vert') shakeEl($('#vertcard'));
     else if(res.shake) shakeEl(document.getElementById('mat-'+res.shake));
     else shakeEl($('#workspace'));
     updateHUD();
@@ -886,6 +1258,8 @@ function setControls(on){
   $('#skipBtn').disabled=!on;
   $('#checkBtn').disabled=!on;
   $('#undoBtn').disabled=!on || state.undo.length===0;
+  var vbs=document.querySelectorAll('.vbox');
+  for(var i=0;i<vbs.length;i++) vbs[i].disabled=!on;
 }
 function doHint(){
   if(state.phase!=='play') return;
@@ -898,7 +1272,6 @@ function doHint(){
 function doSkip(){
   if(state.phase!=='play') return;
   state.streak=0;
-  state.qNum--;
   nextQuestion();
 }
 function showResults(){
@@ -916,9 +1289,25 @@ function showResults(){
   for(var i=0;i<3;i++) sh+=starSvg(i<stars);
   $('#resStars').innerHTML=sh;
   $('#resScore').textContent = c+' out of '+TOTAL_Q+' correct  -  '+state.score+' points';
-  $('#resDetail').textContent = state.score>=best ? ('Best score: '+best+' points') : ('Best score: '+best+' points');
+  $('#resDetail').textContent = 'Best in '+modeInfo(state.mode).label+': '+best+' points';
+  // every finished activity wins a prize; 3 stars upgrades to the rare pool
+  var pool = stars>=3 ? RARE_PRIZES : COMMON_PRIZES;
+  var all = loadPrizes();
+  var prize = pick(pool);
+  if(all.length && all[0].e===prize.e && pool.length>1){
+    prize = pool[(pool.indexOf(prize)+1)%pool.length];
+  }
+  all.unshift({e:prize.e,n:prize.n,t:Date.now(),m:state.mode,s:stars});
+  savePrizes(all);
+  $('#prizeEmoji').textContent=prize.e;
+  $('#prizeLine').innerHTML='You won a <b>'+prize.n+'</b>!';
+  $('#prizeSub').textContent = stars>=3 ? 'RARE prize! It is now on your Prize Shelf 🏆'
+                                         : 'It is now on your Prize Shelf 🏆';
+  $('#prizewrap').hidden=false;
+  updatePrizeCount();
   $('#results').hidden=false;
-  if(stars>0) sfx.win(); else sfx.tick();
+  sfx.win();
+  burst(window.innerWidth/2, 170);
 }
 function starSvg(on){
   return '<svg viewBox="0 0 24 24" class="star'+(on?' on':'')+'" aria-hidden="true"><path d="M12 2l2.9 6.2 6.6.9-4.8 4.7 1.2 6.7L12 17.3 6.1 20.5l1.2-6.7L2.5 9.1l6.6-.9z"/></svg>';
@@ -1067,12 +1456,36 @@ $('#soundBtn').addEventListener('click',function(){
 $('#helpBtn').addEventListener('click',function(){ $('#help').hidden=false; });
 $('#helpClose').addEventListener('click',function(){ $('#help').hidden=true; });
 $('#help').addEventListener('click',function(e){ if(e.target===this) this.hidden=true; });
+$('#shelfBtn').addEventListener('click',function(){ renderShelf(); $('#shelf').hidden=false; });
+$('#shelfClose').addEventListener('click',function(){ $('#shelf').hidden=true; });
+$('#shelf').addEventListener('click',function(e){ if(e.target===this) this.hidden=true; });
 $('#againBtn').addEventListener('click',function(){ $('#results').hidden=true; startRound(); });
 $('#changeBtn').addEventListener('click',function(){ $('#results').hidden=true; startRound(); });
 
-document.addEventListener('keydown',function(e){
-  if(e.key!=='Enter') return;
+document.addEventListener('input',function(e){
   var t=e.target;
+  if(!t.classList || !t.classList.contains('vbox')) return;
+  var max=t.classList.contains('wide')?2:1;
+  t.value=t.value.replace(/[^0-9]/g,'').slice(0,max);
+  if(t.value && t.hasAttribute('data-answer')){
+    var bs=document.querySelectorAll('#vform .vbox[data-answer]');
+    var ix=Array.prototype.indexOf.call(bs,t);
+    if(ix>=0 && ix<bs.length-1) bs[ix+1].focus();
+  }
+});
+document.addEventListener('keydown',function(e){
+  var t=e.target;
+  if(t && t.classList && t.classList.contains('vbox')){
+    if(e.key==='Backspace' && !t.value){
+      var bs=document.querySelectorAll('#vform .vbox[data-answer]');
+      var ix=Array.prototype.indexOf.call(bs,t);
+      if(ix>0){ e.preventDefault(); bs[ix-1].value=''; bs[ix-1].focus(); }
+      return;
+    }
+    if(e.key==='Enter'){ e.preventDefault(); doCheck(); return; }
+    return;
+  }
+  if(e.key!=='Enter') return;
   if(t && t.closest && (t.closest('button') || t.closest('input'))) return;
   e.preventDefault(); doCheck();
 });
