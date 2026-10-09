@@ -230,17 +230,31 @@ b,strong{font-weight:800}
 .vbox:focus{border-color:var(--brand-d);background:#e0e7ff;box-shadow:0 0 0 4px rgba(79,70,229,.18)}
 .vbox.carry{border:2px dashed #f59e0b;background:#fffbeb;color:#b45309;font-size:calc(var(--vc)*.4);width:calc(var(--vc)*.7);height:calc(var(--vc)*.7)}
 .vbox.wide{width:calc(var(--vc)*2.6);height:calc(var(--vc)*1.15);font-size:calc(var(--vc)*.72);letter-spacing:.06em;text-align:center}
-.workspace.mult{display:flex;flex-direction:column;align-items:center;gap:16px;max-width:1100px}
-.workspace.mult .mat{order:1;width:100%;max-width:1000px}
+.workspace.mult{display:flex;flex-direction:column;align-items:center;gap:16px;max-width:1200px}
+.workspace.mult .mat{order:1;width:100%;max-width:1120px}
 .workspace.mult .vertcard{order:2}
-.arr-body{display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-rows:auto 1fr;gap:6px 10px;align-items:start}
-.arr-corner{grid-row:1;grid-column:1;display:grid;place-items:center;min-width:46px;font-size:2.2rem;font-weight:800;color:var(--brand);line-height:1}
-.arr-left{grid-row:2;grid-column:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding-top:4px}
-.arr-body .chart-wrap{grid-row:1 / 3;grid-column:2;min-width:0}
-.arr-cell{display:flex;flex-direction:column;align-items:center;gap:5px;margin-bottom:8px;align-self:stretch}
+.arr-grid{display:grid;column-gap:10px;row-gap:10px;justify-content:center;overflow-x:auto;padding:6px 2px}
+.arr-corner{display:grid;place-items:center;min-width:46px;font-size:2.4rem;font-weight:800;color:var(--brand);border-bottom:3px solid var(--ink);border-right:3px solid var(--ink);padding:0 8px 6px}
+.arr-topcell{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:8px;padding:8px 8px 10px;border-bottom:3px solid var(--ink)}
+.arr-leftcell{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:8px;padding:8px 10px 8px 6px;border-right:3px solid var(--ink)}
 .arr-blocks{display:flex;gap:3px;align-items:flex-end;justify-content:center}
-.arr-label{font-size:.82rem;font-weight:800;color:var(--brand);background:#eef2ff;border-radius:999px;padding:1px 10px}
-.workspace.mult .col-body{min-height:calc(var(--u)*12);max-height:calc(var(--u)*24 + 44px)}
+.arr-blocks.v{flex-direction:column;align-items:center}
+.arr-label{font-size:.8rem;font-weight:800;color:var(--brand);background:#eef2ff;border-radius:999px;padding:0 10px}
+.arr-grid .mini.b-one{width:var(--u);height:var(--u);border-radius:4px}
+.arr-grid .mini.b-ten{width:var(--u);height:calc(var(--u)*10);border-radius:4px}
+.arr-grid .mini.b-ten.h{width:calc(var(--u)*10);height:var(--u);background:repeating-linear-gradient(to right,transparent 0 calc(10% - 1.5px),rgba(0,0,0,.3) calc(10% - 1.5px) 10%),linear-gradient(155deg,var(--ten1),var(--ten2))}
+.asec{border:3px dashed #cbd5e1;border-radius:14px;background:linear-gradient(180deg,#f8fafc,#f1f5f9);padding:6px 8px 10px;display:flex;flex-direction:column;align-items:center;gap:6px;min-height:calc(var(--u)*3)}
+.asec.done{border-color:#86efac;background:var(--ok-bg)}
+.asec-head{display:flex;align-items:center;gap:7px}
+.asec-label{font-size:.88rem;font-weight:800;color:var(--muted)}
+.asec-cnt{font-size:.95rem;background:#e2e8f0;border-radius:8px;padding:1px 8px;font-variant-numeric:tabular-nums;min-width:24px;text-align:center}
+.asec-add{width:32px;height:32px;border-radius:50%;border:0;background:var(--brand);color:#fff;font-size:1.2rem;font-weight:800;cursor:pointer;line-height:1;display:grid;place-items:center}
+.asec-add:disabled{background:#94a3b8;cursor:default}
+.asec-body{display:flex;flex-direction:column;gap:2px;align-items:center;justify-content:center;flex:1}
+.asec-row{display:flex;gap:2px}
+.asec-row .block{cursor:pointer}
+.asec-value{font-size:.92rem;font-weight:800;color:#047857}
+.asec .block.horiz{width:calc(var(--u)*10);height:var(--u);border-radius:4px;background:repeating-linear-gradient(to right,transparent 0 calc(10% - 1.5px),rgba(0,0,0,.3) calc(10% - 1.5px) 10%),linear-gradient(155deg,var(--ten1),var(--ten2))}
 .vbox:disabled{opacity:.85;cursor:default}
 .vhelp{font-size:.92rem;font-weight:700;color:var(--muted);text-align:center}
 .prizewrap{background:linear-gradient(135deg,#fff7ed,#fef9c3);border:3px solid #fcd34d;border-radius:20px;padding:16px 18px;margin-top:14px}
@@ -376,7 +390,7 @@ b,strong{font-weight:800}
       <li><b>Stuck?</b> Press <span class="kbd">Hint</span>, or <span class="kbd">Undo</span> / <span class="kbd">Start over</span>.</li>
       <li><b>Count the Blocks:</b> the chart is already filled. Count the ten-rods and the one-cubes, then write the total in the boxes. Trading 10 ones for 1 ten keeps the same total, but taking blocks away changes it &mdash; so count carefully!</li>
       <li><b>Word Problems:</b> read the story, spot the clue words (more = add, left = subtract), write the answer in the column boxes, then build it with blocks.</li>
-      <li><b>Multiplication:</b> write the product in the boxes, then build it with blocks. Think: 3 &times; 4 means 3 groups of 4.</li>
+      <li><b>Multiplication:</b> break the numbers into tens and ones, build each part of the array (like 10 &times; 5 = 50), then add the parts and write the product.</li>
       <li><b>Column boxes:</b> start from the ones on the right. When a column needs a carry or a borrow, a small orange box appears above it &mdash; write the tiny number there, just like on your worksheet!</li>
       <li><b>Prizes:</b> finish any activity to win a candy, toy or squishy &mdash; see them on your 🏆 Prize Shelf!</li>
     </ul>
@@ -420,7 +434,7 @@ var MODES = [
   {id:'add',     label:'Addition',      glyph:'+',   tip:'Add blocks, then trade to regroup.'},
   {id:'sub',     label:'Subtraction',   glyph:'-',   tip:'Take away blocks. Break a ten when you must.'},
   {id:'word',    label:'Word Problems', glyph:'Aa',  tip:'Read the story, fill the columns, build the answer.'},
-  {id:'mult',    label:'Multiplication',glyph:'\u00d7', tip:'Write the product in the boxes, then build it with blocks.'},
+  {id:'mult',    label:'Multiplication',glyph:'\u00d7', tip:'Break the numbers apart, build each part of the array, then add the parts.'},
   {id:'compare', label:'Compare',       glyph:'<>',  tip:'Build both numbers, then pick a sign.'},
   {id:'skip',    label:'Skip Counting', glyph:'...', tip:'Find the missing number in the pattern.'}
 ];
@@ -899,34 +913,67 @@ function genWord(){
 }
 function genMult(){
   var L=state.level, a, b;
-  if(L==='easy'){ a=rnd(2,9); b=rnd(2,9); }
-  else if(L==='medium'){ a=rnd(11,49); b=rnd(2,9); }
-  else { a=rnd(11,99); b=rnd(2,9); }
-  var p=a*b;
+  if(L==='easy'){ a=rnd(2,5); b=rnd(2,5); }
+  else if(L==='medium'){ a=rnd(11,49); b=rnd(2,5); }
+  else { a=rnd(11,25); b=rnd(11,25); }
+  var p=a*b, T=Math.floor(a/10), O=a%10, Bt=Math.floor(b/10), Bo=b%10;
+  var tops=[], lefts=[], i, j;
+  if(T>0) tops.push({val:T*10,ten:true});
+  if(O>0) tops.push({val:O,ten:false});
+  if(Bt>0) lefts.push({val:Bt*10,ten:true});
+  if(Bo>0) lefts.push({val:Bo,ten:false});
+  var secs=[];
+  function addSec(kind,perRow,rows,horiz,leftVal,topVal){
+    secs.push({
+      kind:kind, perRow:perRow, rows:rows, horiz:!!horiz, need:perRow*rows,
+      label:leftVal+' \u00d7 '+topVal,
+      value:perRow*rows*(kind==='hundred'?100:kind==='ten'?10:1)
+    });
+  }
+  for(i=0;i<lefts.length;i++){
+    for(j=0;j<tops.length;j++){
+      var li=lefts[i], tj=tops[j];
+      if(li.ten && tj.ten) addSec('hundred', T, Bt, false, li.val, tj.val);
+      else if(li.ten && !tj.ten) addSec('ten', O, Bt, false, li.val, tj.val);
+      else if(!li.ten && tj.ten) addSec('ten', T, Bo, true, li.val, tj.val);
+      else addSec('one', O, Bo, false, li.val, tj.val);
+    }
+  }
+  var sumParts=[], sumStr;
+  for(i=0;i<secs.length;i++) sumParts.push(secs[i].value);
+  sumStr=sumParts.join(' + ');
   return {
-    kind:'mult', a:a, b:b, ans:p, op:'\u00d7',
+    kind:'mult2', a:a, b:b, ans:p, op:'\u00d7',
+    sections:secs,
     prompt:'<b>'+a+' \u00d7 '+b+'</b> = ?',
-    tip:'Fill the array: '+b+' rows of '+a+'. Put rods in the tens column and ones in the ones column, then write the product.',
-    mats:['A'], titles:['The product'], init:{A:mat()},
-    hasHundreds: p>=100,
+    tip:'Break '+a+' and '+b+' into tens and ones. Build each part of the array, then add the parts together.',
+    mats:[], titles:[], init:{},
+    hasHundreds:p>=100,
     check:function(){
-      var vert=readVert();
-      var br=checkValue('A',p,{ok:''});
-      if(vert===null){
-        if(br.ok) return {ok:false,msg:'Your blocks are perfect! Now type the product in the boxes.',shake:'vert'};
-        return {ok:false,msg:'Fill the answer boxes AND build the product with blocks.',shake:'vert'};
+      var i, s, n;
+      for(i=0;i<secs.length;i++){
+        s=secs[i]; n=state.secs[i];
+        if(n!==s.need){
+          var unit = s.kind==='hundred'?'hundreds' : s.kind==='ten'?'tens' : 'ones';
+          var msg = n<s.need
+            ? 'The '+s.label+' part needs '+(s.need-n)+' more '+unit+'.'
+            : 'The '+s.label+' part has too many '+unit+' \u2014 take '+(n-s.need)+' away.';
+          return {ok:false,msg:msg,shake:'sec:'+i};
+        }
       }
-      if(vert!==p) return {ok:false,msg:'You wrote '+vert+'. Count again \u2014 think '+a+' groups of '+b+'!',shake:'vert'};
-      if(!br.ok) return {ok:false,msg:'Your columns say '+p+' \u2014 good! Now show it with blocks: '+br.msg,shake:br.shake};
-      return {ok:true,msg:'Yes! '+a+' \u00d7 '+b+' = <b>'+p+'</b>.'};
+      var typed=readVert();
+      if(typed===null) return {ok:false,msg:'All parts are built! Add them: '+sumStr+'. Write the product in the boxes.',shake:'vert'};
+      if(typed!==p) return {ok:false,msg:'You wrote '+typed+'. Add the parts: '+sumStr+' = ?',shake:'vert'};
+      return {ok:true,msg:'Yes! '+sumStr+' = <b>'+p+'</b>, so '+a+' \u00d7 '+b+' = <b>'+p+'</b>.'};
     },
     hint:function(l){
-      var T=Math.floor(a/10), O=a%10;
+      var i, parts=[];
       if(l===0){
-        if(T>0) return b+' rows of '+a+': '+b+' \u00d7 '+T+' = '+(b*T)+' rods ('+(b*T*10)+') and '+b+' \u00d7 '+O+' = '+(b*O)+' ones.';
-        return b+' rows of '+O+' ones = '+(b*O)+' ones. Trade 10 ones for 1 ten.';
+        for(i=0;i<secs.length;i++) parts.push(secs[i].label);
+        return 'Split '+a+' into '+(T>0? T*10+' + ':'')+O+' and '+b+' into '+(Bt>0? Bt*10+' + ':'')+Bo+'. Build these parts: '+parts.join(', ')+'.';
       }
-      return 'The product is '+p+'.';
+      for(i=0;i<secs.length;i++) parts.push(secs[i].label+' = '+secs[i].value);
+      return parts.join('; ')+'. The product is '+p+'.';
     }
   };
 }
@@ -983,9 +1030,8 @@ function buildLevels(){
     btns[i].setAttribute('aria-pressed', String(btns[i].getAttribute('data-level')===state.level));
   }
 }
-function colShell(id,kind,label,top){
+function colShell(id,kind,label){
   return '<div class="col col-'+kind+'">'+
-    (top||'')+
     '<div class="col-head">'+
       '<span class="col-name">'+label+'</span>'+
       '<b class="col-cnt" id="cnt-'+id+'-'+kind+'">0</b>'+
@@ -1032,38 +1078,98 @@ function matShell(id,title){
     matTail(id)+
   '</section>';
 }
-function miniRun(kind,n,label){
-  if(!n) return '';
-  var h='', i;
-  for(i=0;i<n;i++) h+='<span class="mini b-'+kind+'" aria-hidden="true"></span>';
-  return '<div class="arr-cell" aria-hidden="true"><div class="arr-blocks">'+h+'</div><span class="arr-label">'+label+'</span></div>';
+function secShell(idx,s,col,row){
+  return '<div class="asec kind-'+s.kind+(s.horiz?' horiz':'')+'" id="asec-'+idx+'" data-sec="'+idx+'" data-kind="'+s.kind+'" style="grid-column:'+col+';grid-row:'+row+'">'+
+    '<div class="asec-head">'+
+      '<span class="asec-label">'+s.label+'</span>'+
+      '<b class="asec-cnt" id="scnt-'+idx+'">0</b>'+
+      '<button type="button" class="asec-add" data-addsec="'+idx+'" aria-label="Add one block">+</button>'+
+    '</div>'+
+    '<div class="asec-body" id="sbody-'+idx+'"></div>'+
+    '<div class="asec-value" id="sval-'+idx+'" hidden></div>'+
+  '</div>';
+}
+function updateSec(i){
+  var q=state.question, s=q.sections[i], n=state.secs[i], j, k, row, rows=[];
+  document.getElementById('scnt-'+i).textContent=n;
+  for(j=0;j<n;j+=s.perRow){
+    row='';
+    for(k=0;k<s.perRow && j+k<n;k++){
+      row+='<button type="button" class="block b-'+s.kind+(s.kind==='ten'&&s.horiz?' horiz':'')+'" data-remsec="'+i+'" tabindex="-1" aria-hidden="true"></button>';
+    }
+    rows.push('<div class="asec-row">'+row+'</div>');
+  }
+  document.getElementById('sbody-'+i).innerHTML=rows.join('');
+  var done=(n===s.need);
+  document.getElementById('asec-'+i).className='asec kind-'+s.kind+(s.horiz?' horiz':'')+(done?' done':'');
+  var v=document.getElementById('sval-'+i);
+  v.hidden=!done;
+  if(done) v.innerHTML='= '+s.value;
+  var ab=document.querySelector('[data-addsec="'+i+'"]');
+  if(ab) ab.disabled = state.phase!=='play' || n>=s.need+5;
+}
+function renderSecs(){
+  var q=state.question, i;
+  for(i=0;i<q.sections.length;i++) updateSec(i);
+}
+function addSec(i){
+  if(state.phase!=='play') return;
+  var s=state.question.sections[i];
+  if(state.secs[i]>=s.need+5) return;
+  state.secs[i]++;
+  sfx.add();
+  updateSec(i);
+}
+function remSec(i){
+  if(state.phase!=='play') return;
+  if(state.secs[i]<1) return;
+  state.secs[i]--;
+  sfx.take();
+  updateSec(i);
 }
 function arrayShell(q){
-  var a=q.a, T=Math.floor(a/10), O=a%10, b=q.b, left='', i;
-  for(i=0;i<b;i++) left+='<span class="mini b-one" aria-hidden="true"></span>';
+  var a=q.a, b=q.b, T=Math.floor(a/10), O=a%10, Bt=Math.floor(b/10), Bo=b%10;
+  var tops=[], lefts=[], i, j;
+  if(T>0) tops.push({ten:true,n:T});
+  if(O>0) tops.push({ten:false,n:O});
+  if(Bt>0) lefts.push({ten:true,n:Bt});
+  if(Bo>0) lefts.push({ten:false,n:Bo});
+  var h='<div class="arr-grid" style="grid-template-columns:auto';
+  for(i=0;i<tops.length;i++) h+=' max-content';
+  h+='">';
+  h+='<div class="arr-corner" aria-hidden="true">\u00d7</div>';
+  for(i=0;i<tops.length;i++){
+    var tc=tops[i], blk='';
+    for(j=0;j<tc.n;j++) blk+='<span class="mini '+(tc.ten?'b-ten h':'b-one')+'" aria-hidden="true"></span>';
+    h+='<div class="arr-topcell" style="grid-column:'+(2+i)+';grid-row:1">'+
+       '<div class="arr-blocks">'+blk+'</div><span class="arr-label">'+(tc.ten?'10':'1')+'</span></div>';
+  }
+  for(i=0;i<lefts.length;i++){
+    var lc=lefts[i], blk2='';
+    for(j=0;j<lc.n;j++) blk2+='<span class="mini '+(lc.ten?'b-ten':'b-one')+'" aria-hidden="true"></span>';
+    h+='<div class="arr-leftcell" style="grid-column:1;grid-row:'+(2+i)+'">'+
+       '<div class="arr-blocks v">'+blk2+'</div><span class="arr-label">'+(lc.ten?'10':'1')+'</span></div>';
+  }
+  for(i=0;i<lefts.length;i++){
+    for(j=0;j<tops.length;j++){
+      h+=secShell(i*tops.length+j, q.sections[i*tops.length+j], 2+j, 2+i);
+    }
+  }
+  h+='</div>';
   return '<section class="mat" id="mat-A" data-matid="A">'+
     '<div class="mat-head">'+
       '<span class="mat-title">Build the array</span>'+
-      '<span class="mat-value" id="val-A">0</span>'+
-    '</div>'+
-    '<div class="arr-body">'+
-      '<div class="arr-corner" aria-hidden="true">\u00d7</div>'+
-      '<div class="arr-left" aria-hidden="true">'+left+'</div>'+
-      '<div class="chart-wrap"><div class="chart" data-drop="mat" data-mat="A">'+
-        colShell('A','hundred','Hundreds')+
-        colShell('A','ten','Tens',miniRun('ten',T,'10'))+
-        colShell('A','one','Ones',miniRun('one',O,'1'))+
-      '</div></div>'+
-    '</div>'+
-    matTail('A')+
+      '<span class="mat-value" id="val-A">?</span>'+
+    '</div>'+h+
   '</section>';
 }
 function renderWorkspace(){
   var q=state.question, ws=$('#workspace'), h='', i;
-  if(q.kind==='mult'){
+  if(q.kind==='mult'||q.kind==='mult2'){
     ws.className='workspace mult';
     ws.style.setProperty('--u-base', (uBase()+4)+'px');
     ws.innerHTML=vertShell(q)+arrayShell(q);
+    renderSecs();
   } else {
     var vert = q.kind==='word' || q.kind==='count';
     ws.className='workspace' + ((q.mats.length>1||vert)?' two':'') + (((q.mats.length>1||vert)&&q.hasHundreds)?' stacked':'');
@@ -1263,6 +1369,11 @@ function doReset(){
   state.undo=[]; state.symbol=null;
   var vbs=document.querySelectorAll('.vbox');
   for(var vi=0;vi<vbs.length;vi++) vbs[vi].value='';
+  if(state.secs){
+    state.secs=[];
+    for(var si=0;si<q.sections.length;si++) state.secs.push(0);
+    renderSecs();
+  }
   syncSymbols();
   sfx.tick(); clearSay(); updateAll();
 }
@@ -1304,6 +1415,7 @@ function doCheck(){
     say('bad',res.msg);
     if(res.shake==='sym') shakeEl($('#symbbar'));
     else if(res.shake==='vert') shakeEl($('#vertcard'));
+    else if(res.shake && res.shake.indexOf('sec:')===0) shakeEl(document.getElementById('asec-'+res.shake.slice(4)));
     else if(res.shake) shakeEl(document.getElementById('mat-'+res.shake));
     else shakeEl($('#workspace'));
     updateHUD();
@@ -1317,6 +1429,8 @@ function setControls(on){
   $('#undoBtn').disabled=!on || state.undo.length===0;
   var vbs=document.querySelectorAll('.vbox');
   for(var i=0;i<vbs.length;i++) vbs[i].disabled=!on;
+  var abs=document.querySelectorAll('.asec-add');
+  for(var ai=0;ai<abs.length;ai++) abs[ai].disabled=!on;
 }
 function doHint(){
   if(state.phase!=='play') return;
@@ -1459,6 +1573,14 @@ document.addEventListener('click',function(e){
     if(t===suppressClickOn || ce===suppressClickOn){ e.preventDefault(); return; }
   }
 
+  if((el=t.closest('[data-addsec]'))){
+    addSec(+el.getAttribute('data-addsec'));
+    return;
+  }
+  if((el=t.closest('[data-remsec]'))){
+    remSec(+el.getAttribute('data-remsec'));
+    return;
+  }
   if((el=t.closest('[data-place]'))){
     addBlock(el.getAttribute('data-mat'), el.getAttribute('data-place'));
     return;
@@ -1557,6 +1679,8 @@ function nextQuestion(){
   state.mats={};
   var q=state.question;
   for(var i=0;i<q.mats.length;i++) state.mats[q.mats[i]]=cloneM(q.init[q.mats[i]]);
+  state.secs=null;
+  if(q.sections){ state.secs=[]; for(var si=0;si<q.sections.length;si++) state.secs.push(0); }
   renderWorkspace();
   syncSymbols();
   clearSay();
