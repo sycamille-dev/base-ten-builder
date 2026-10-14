@@ -521,26 +521,33 @@ function clapSfx(){
   if(!state.sound) return;
   var c=ac(); if(!c) return;
   var t=c.currentTime, i;
-  for(i=0;i<4;i++){
-    var st=t+i*0.022, dur=0.09+i*0.02;
+  var master=c.createGain(); master.gain.value=0.5; master.connect(c.destination);
+  var n=14, st=t;
+  for(i=0;i<n;i++){
+    var frac=i/(n-1);
+    st += (0.045-0.02*frac)*(0.7+Math.random()*0.6)+0.016;
+    var dur=0.03+Math.random()*0.02;
     var src=c.createBufferSource(); src.buffer=noiseSource(c);
-    var bp=c.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=900+Math.random()*700; bp.Q.value=1.1;
+    src.playbackRate.value=0.85+Math.random()*0.3;
+    var bp=c.createBiquadFilter(); bp.type='bandpass';
+    bp.frequency.value=1400+Math.random()*2400; bp.Q.value=0.6+Math.random()*0.5;
     var g=c.createGain();
-    var vol=0.55-i*0.08;
+    var vol=(0.10+Math.random()*0.07)*(0.75+frac*0.5);
     g.gain.setValueAtTime(0.0001,st);
-    g.gain.exponentialRampToValueAtTime(vol,st+0.004);
+    g.gain.exponentialRampToValueAtTime(vol,st+0.003);
     g.gain.exponentialRampToValueAtTime(0.0001,st+dur);
-    src.connect(bp); bp.connect(g); g.connect(c.destination);
-    src.start(st); src.stop(st+dur+0.05);
+    src.connect(bp); bp.connect(g); g.connect(master);
+    src.start(st,0.05+Math.random()*0.2); src.stop(st+dur+0.03);
   }
-  var s2=c.createBufferSource(); s2.buffer=noiseSource(c);
-  var bp2=c.createBiquadFilter(); bp2.type='bandpass'; bp2.frequency.value=1400; bp2.Q.value=0.8;
+  var w=c.createBufferSource(); w.buffer=noiseSource(c);
+  w.playbackRate.value=0.5;
+  var lp=c.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=1800;
   var g2=c.createGain();
-  g2.gain.setValueAtTime(0.0001,t+0.07);
-  g2.gain.exponentialRampToValueAtTime(0.13,t+0.10);
-  g2.gain.exponentialRampToValueAtTime(0.0001,t+0.40);
-  s2.connect(bp2); bp2.connect(g2); g2.connect(c.destination);
-  s2.start(t+0.07); s2.stop(t+0.46);
+  g2.gain.setValueAtTime(0.0001,t+0.02);
+  g2.gain.exponentialRampToValueAtTime(0.09,t+0.35);
+  g2.gain.exponentialRampToValueAtTime(0.0001,t+0.78);
+  w.connect(lp); lp.connect(g2); g2.connect(master);
+  w.start(t+0.02); w.stop(t+0.80);
 }
 var sfx = {
   add:  function(){ tone(680,0,0.07,'triangle',0.12); },
